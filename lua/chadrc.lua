@@ -5,7 +5,12 @@
 local M = {}
 
 M.base46 = {
-	theme = "onedark",
+	theme = "nightowl",
+  hl_override = {
+    LineNr = { fg = "#FFFFFF" },
+    TabLine = { fg = "#FFFFFF" },
+    TabLineSel = { fg = "#FFFFFF" },
+  },
 
 	-- hl_override = {
 	-- 	Comment = { italic = true },

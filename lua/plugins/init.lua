@@ -13,13 +13,66 @@ return {
     end,
   },
 
-  -- {
-  -- 	"nvim-treesitter/nvim-treesitter",
-  -- 	opts = {
-  -- 		ensure_installed = {
-  -- 			"vim", "lua", "vimdoc",
-  --      "html", "css"
-  -- 		},
-  -- 	},
-  -- },
+  {
+    'mfussenegger/nvim-jdtls'
+  },
+  {
+  	"nvim-treesitter/nvim-treesitter",
+    -- build = ":TSUpdate",
+    -- event = { "BufReadPre", "BufNewFile"},
+  	opts = {
+  		ensure_installed = {
+  			"vim", "lua", "vimdoc",
+        "html", "css",
+        "typescript", "javascript"
+  		},
+  	},
+    -- config = function()
+    --   local treesitter = require("nvim-treesitter.configs")
+    --   treesitter.setup({
+    --     highlight = {
+    --       enable = true,
+    --     },
+    --     indent  = { enable = true },
+    --     ensure_installed = {
+    --       "vim", "lua", "vimdoc",
+    --       "html", "css",
+    --       "typescript", "javascript"
+    --     },
+    --     incremental_selection = {
+    --       enable = true,
+    --       keymaps = {
+    --         init_selection = "<C-space>",
+    --         node_incremental = "<C-space>",
+    --         scope_incremental = false,
+    --         node_decremental = "<bs>",
+    --       }
+    --     }
+    --   })
+    -- end,
+  },
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup({
+        sort_by = "case_sensitive",
+        view = {
+          width = 60,
+        },
+        renderer = {
+          group_empty = true,
+        },
+        filters = {
+          dotfiles = false,
+        },
+      })
+
+      -- Set keymaps
+      vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { silent = true })
+      vim.keymap.set('n', '<leader>e', ':NvimTreeFocus<CR>', { silent = true })
+    end,
+  },
 }
