@@ -1,4 +1,3 @@
--- local config 
 return {
   {
     "mfussenegger/nvim-jdtls",
@@ -60,13 +59,40 @@ return {
             },
           },
         },
-        on_attach = function(client, bufnr)
-          print("JDTLS attached to buffer: " .. bufnr)
-          -- Add any other on_attach functions you want here
+      }
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "java",
+        callback = function()
+          local bufnr = vim.api.nvim_get_current_buf()
+          local fname = vim.api.nvim_buf_get_name(bufnr)
+          if fname:match("%.java$") then
+            print("Attaching JDTLS to Java file: " .. bufnr)
+            local current_buffer = vim.api.nvim_get_current_buf()
+            local clients = vim.lsp.get_clients({ bufnr = current_buffer })
+            local jdtls_client = vim.tbl_filter(function(client)
+              return client.name == "jdtls"
+            end, clients)[1]
+
+            if not jdtls_client then
+              require('jdtls').start_or_attach(config)
+            -- else
+            --   print("JDTLS is already attached java lua")
+            end
+          end
         end,
-     }
-      print("here lol")
-      require('jdtls').start_or_attach(config)
+      })
+      -- -- print("JDTLS setup complete")
+      local current_buffer = vim.api.nvim_get_current_buf()
+      local clients = vim.lsp.get_clients({ bufnr = current_buffer })
+      local jdtls_client = vim.tbl_filter(function(client)
+        return client.name == "jdtls"
+      end, clients)[1]
+
+      if not jdtls_client then
+        require('jdtls').start_or_attach(config)
+      -- else
+      --   print("JDTLS is already attached")
+      end
     end,
     -- config.on_attach = function(client, bufnr)
     --   print("JDTLS attached to buffer: " .. bufnr)

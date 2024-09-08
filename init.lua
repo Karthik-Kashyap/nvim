@@ -60,6 +60,27 @@ require("lazy").setup({
   { import = "plugins" },
 }, lazy_config)
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "java",
+  callback = function()
+    local jdtls = require('jdtls')
+    if jdtls then
+      local current_buffer = vim.api.nvim_get_current_buf()
+      local clients = vim.lsp.get_clients({ bufnr = current_buffer })
+      local jdtls_client = vim.tbl_filter(function(client)
+        return client.name == "jdtls"
+      end, clients)[1]
+
+      if not jdtls_client then
+        jdtls.start_or_attach(require('plugins.java')[1].config())
+      -- else
+      --   print("JDTLS is already attached init lua")
+      end
+    else
+      print("JDTLS is not available")
+    end
+  end,
+})
 -- load theme
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
